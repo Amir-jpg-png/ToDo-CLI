@@ -1,6 +1,6 @@
 title = "ToDo-CLI"
 baseURL = "https://amir-jpg-png.github.io/ToDo-CLI/"
-canonifyURLs = true
+canonifyURLs = false
 relativeURLs = false
 disableAliases = true
 disableHugoGeneratorInject = true
