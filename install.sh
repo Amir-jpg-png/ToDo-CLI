@@ -4,7 +4,7 @@ set -e
 REPO_URL="http://localhost:3002/Amir/ToDo-CLI.git"
 CLONE_DIR="/tmp/todo-install"
 
-if [-d "$CLONE_DIR/.git"]; then
+if [ -d "$CLONE_DIR/.git" ]; then
   echo "Updating existing repository"
   git -C "$CLONE_DIR" pull
 else
