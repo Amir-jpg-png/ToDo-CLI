@@ -1,5 +1,5 @@
 title = "ToDo-CLI"
-baseurl = "http://localhost/"
+baseurl = "https://amir-jpg-png.github.io/ToDo-CLI/"
 disableAliases = true
 disableHugoGeneratorInject = true
 # disableKinds = ["taxonomy", "term"]
