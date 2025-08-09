@@ -1,6 +1,7 @@
 title = "ToDo-CLI"
-baseurl = "https://amir-jpg-png.github.io/ToDo-CLI/"
+baseURL = "https://amir-jpg-png.github.io/ToDo-CLI/"
 canonifyURLs = true
+relativeURLs = false
 disableAliases = true
 disableHugoGeneratorInject = true
 # disableKinds = ["taxonomy", "term"]
