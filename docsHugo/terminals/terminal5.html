@@ -1,0 +1,118 @@
+<div class="mac-background">
+  <div class="mac-terminal">
+    <div class="terminal-header">
+      <span class="btn red"></span>
+      <span class="btn yellow"></span>
+      <span class="btn green"></span>
+      <span class="title">iTerm2 — bash — 116x29</span>
+    </div>
+    <div class="terminal-body">
+      <span class="prompt">
+        <span class="dir">MacBook-Pro:todo</span>
+        <span class="user"> user</span>
+        <span class="symbol">$</span>
+      </span>
+      <span id="typed-output"></span>
+    </div>
+  </div>
+</div>
+
+<style>
+  /* macOS background */
+  .mac-background {
+    background: url("https://images.unsplash.com/photo-1506748686214-e9df14d4d9d0?ixlib=rb-4.0.3&auto=format&fit=crop&w=1950&q=80")
+      center/cover no-repeat;
+    height: 100vh;
+    width: 100vw;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+  }
+
+  /* Terminal window */
+  .mac-terminal {
+    width: 928px; /* 116 columns */
+    height: 550px; /* ~29 rows with padding */
+    border-radius: 8px;
+    overflow: hidden;
+    font-family: Menlo, Monaco, monospace;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.4);
+    display: flex;
+    flex-direction: column;
+  }
+
+  /* Title bar */
+  .terminal-header {
+    background: #ddd;
+    height: 28px;
+    display: flex;
+    align-items: center;
+    padding: 0 8px;
+    position: relative;
+  }
+
+  .btn {
+    height: 12px;
+    width: 12px;
+    border-radius: 50%;
+    display: inline-block;
+    margin-right: 6px;
+  }
+  .red {
+    background: #ff5f56;
+  }
+  .yellow {
+    background: #ffbd2e;
+  }
+  .green {
+    background: #27c93f;
+  }
+
+  .title {
+    position: absolute;
+    left: 50%;
+    transform: translateX(-50%);
+    font-size: 12px;
+    color: #555;
+  }
+
+  /* Terminal body */
+  .terminal-body {
+    background: #1e1e1e;
+    color: #eee;
+    padding: 10px;
+    flex-grow: 1;
+    white-space: pre;
+    display: flex;
+    align-items: flex-start;
+  }
+
+  /* Prompt styling - iTerm2 default */
+  .prompt {
+    color: #0ff;
+    margin-right: 5px;
+  }
+  .dir {
+    color: #0ff;
+  }
+  .user {
+    color: #0ff;
+  }
+  .symbol {
+    color: #fff;
+    margin-left: 5px;
+  }
+</style>
+
+<script src="https://cdn.jsdelivr.net/npm/typed.js@2.0.12"></script>
+<script>
+  new Typed("#typed-output", {
+    strings: [' todo add "Buy milk"', " todo list", " todo remove 1", " todo"],
+    typeSpeed: 60,
+    backSpeed: 40,
+    backDelay: 1000,
+    loop: true,
+    showCursor: true,
+    cursorChar: "█",
+  });
+</script>

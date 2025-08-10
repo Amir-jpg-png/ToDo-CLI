@@ -1,0 +1,87 @@
+<div class="mac-background">
+  <div class="mac-terminal">
+    <div class="terminal-header">
+      <span class="btn red"></span>
+      <span class="btn yellow"></span>
+      <span class="btn green"></span>
+      <span class="title">bash — 80x24</span>
+    </div>
+    <div class="terminal-body">
+      <span id="typed-output"></span>
+    </div>
+  </div>
+</div>
+
+<style>
+  /* Background simulating macOS desktop */
+  .mac-background {
+    background: url("https://upload.wikimedia.org/wikipedia/commons/3/3e/MacOS_Ventura_Wallpaper_Orange_and_Blue.png")
+      center/cover no-repeat;
+    padding: 40px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+  }
+
+  /* Terminal styling */
+  .mac-terminal {
+    max-width: 700px;
+    border-radius: 8px;
+    overflow: hidden;
+    font-family: Menlo, Monaco, monospace;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.4);
+  }
+
+  .terminal-header {
+    background: #ddd;
+    height: 28px;
+    display: flex;
+    align-items: center;
+    padding: 0 8px;
+    position: relative;
+  }
+
+  .btn {
+    height: 12px;
+    width: 12px;
+    border-radius: 50%;
+    display: inline-block;
+    margin-right: 6px;
+  }
+  .red {
+    background: #ff5f56;
+  }
+  .yellow {
+    background: #ffbd2e;
+  }
+  .green {
+    background: #27c93f;
+  }
+
+  .title {
+    position: absolute;
+    left: 50%;
+    transform: translateX(-50%);
+    font-size: 12px;
+    color: #555;
+  }
+
+  .terminal-body {
+    background: #1e1e1e;
+    color: #eee;
+    padding: 16px;
+    min-height: 200px;
+    white-space: pre;
+  }
+</style>
+
+<script src="https://cdn.jsdelivr.net/npm/typed.js@2.0.12"></script>
+<script>
+  new Typed("#typed-output", {
+    strings: ['todo add "Buy milk"', "todo list", "todo remove 1", "todo"],
+    typeSpeed: 60,
+    backSpeed: 40,
+    backDelay: 1000,
+    loop: true,
+  });
+</script>

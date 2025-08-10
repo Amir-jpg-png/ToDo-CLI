@@ -1,3 +1,4 @@
+
 {{ define "main" }}
 <section class="section container-fluid mt-n3 pb-3">
   <div class="row justify-content-center">
@@ -10,50 +11,387 @@
       {{ .Content }}
     </div>
   </div>
-</section>
-{{ end }}
 
-{{ define "sidebar-prefooter" }}
-  {{ if site.Params.doks.backgroundDots -}}
-  <div class="d-flex justify-content-start">
-    <div class="bg-dots"></div>
-  </div>
-  {{ end -}}
-  {{ if eq $.Site.Language.LanguageName "English" }}
-  <section class="section section-md section-features">
-    <div class="container">
-      <div class="row justify-content-center text-center">
-        <div class="col-lg-5">
-          <h2 class="h4">Track your Progress</h2>
-          <p>Add and manage your tasks in a simple CLI. Never having to leave the project you are currently working on.</p>
-        </div>
-        <div class="col-lg-5">
-          <h2 class="h4">Ease of use</h2>
-          <p>Four words to track your whole project at once.</p>
-        </div>
-        <div class="col-lg-5">
-          <h2 class="h4">Never leave the terminal</h2>
-          <p>Perfect for software developers working in nvim and for DevOps engineers.</p>
-        </div>
-        <div class="col-lg-5">
-          <h2 class="h4">Read the docs</h2>
-          <p>Learn more in the <a href="https://amir-jpg-png.github.io/ToDo-CLI/docs">Docs</a>.</p>
+  <!-- Terminal Demo Container -->
+  <div class="row justify-content-center mt-5">
+    <div class="col-md-8 col-lg-6">
+      <!-- Wrap terminal in a smaller box -->
+      <div class="terminal-demo-wrapper" style="border-radius:12px; box-shadow:0 10px 30px rgba(0,0,0,0.3); overflow:hidden;">
+        <!-- Terminal HTML here -->
+        <div class="mac-background" style="padding: 20px; background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); border-radius: 12px;">
+          <div class="mac-terminal" style="width: 100%; height: 400px; max-width: 100%;">
+            <div class="terminal-header">
+              <div class="traffic-lights">
+                <span class="btn red"></span>
+                <span class="btn yellow"></span>
+                <span class="btn green"></span>
+              </div>
+              <span class="title">name — zsh — 116×29</span>
+            </div>
+            <div class="terminal-body">
+              <div id="terminal-content"></div>
+            </div>
+          </div>
         </div>
       </div>
     </div>
-  </section>
-  {{ end }}
-{{ end }}
-
-{{ define "sidebar-footer" }}
-{{ if site.Params.doks.sectionFooter -}}
-<section class="section section-md container-fluid bg-light">
-  <div class="row justify-content-center text-center">
-    <div class="col-lg-7">
-      <h2 class="mt-2">Start building with Doks today</h2>
-      <a class="btn btn-primary rounded-pill px-4 my-2" href="/docs/{{ if site.Params.doks.docsVersioning }}{{ site.Params.doks.docsVersion }}/{{ end }}prologue/introduction/" role="button">{{ i18n "get-started" }}</a>
-    </div>
   </div>
-</section>
-{{ end -}}
+
+  <!-- Styles (could be moved to partial or assets) -->
+  <style>
+    :root {
+      --term-width: 100%; /* use full width of container */
+      --term-height: 400px;
+      --header-h: 36px;
+      --term-bg: #1d1d1d;
+      --font:
+        "SF Mono", Menlo, Monaco, "Cascadia Code", "Roboto Mono", Consolas,
+        "Courier New", monospace;
+      --cursor-color: #ffffff;
+    }
+
+    /* Put here only styles used inside terminal */
+    .mac-terminal {
+      width: var(--term-width);
+      max-width: 100%;
+      height: var(--term-height);
+      border-radius: 12px;
+      overflow: hidden;
+      font-family: var(--font);
+      box-shadow:
+        0 20px 60px rgba(0, 0, 0, 0.3),
+        0 0 0 1px rgba(255, 255, 255, 0.1);
+      display: flex;
+      flex-direction: column;
+      backdrop-filter: blur(20px);
+    }
+
+    .terminal-header {
+      background: linear-gradient(180deg, #3c3c3c 0%, #2d2d2d 100%);
+      height: var(--header-h);
+      display: flex;
+      align-items: center;
+      padding: 0 16px;
+      position: relative;
+      border-bottom: 1px solid #1a1a1a;
+    }
+
+    .traffic-lights {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .btn {
+      height: 12px;
+      width: 12px;
+      border-radius: 50%;
+      display: inline-block;
+      position: relative;
+      border: 0.5px solid rgba(0, 0, 0, 0.2);
+    }
+
+    .red {
+      background: linear-gradient(135deg, #ff6b5a 0%, #ff4136 100%);
+    }
+
+    .yellow {
+      background: linear-gradient(135deg, #ffdc3c 0%, #ffb700 100%);
+    }
+
+    .green {
+      background: linear-gradient(135deg, #28d940 0%, #20c933 100%);
+    }
+
+    .title {
+      position: absolute;
+      left: 50%;
+      transform: translateX(-50%);
+      font-size: 13px;
+      font-weight: 500;
+      color: #cccccc;
+      letter-spacing: 0.2px;
+    }
+
+    .terminal-body {
+      background: var(--term-bg);
+      color: #ffffff;
+      padding: 16px 20px;
+      height: calc(var(--term-height) - var(--header-h));
+      overflow-y: auto;
+      font-size: 14px;
+      line-height: 20px;
+      font-weight: 400;
+      position: relative;
+      font-family: var(--font);
+    }
+
+    .terminal-line {
+      display: flex;
+      align-items: baseline;
+      margin-bottom: 4px;
+    }
+
+    .prompt {
+      display: flex;
+      align-items: baseline;
+      flex-shrink: 0;
+    }
+
+    .user {
+      color: #61dafb;
+      font-weight: 500;
+    }
+
+    .separator {
+      color: #ffffff;
+      margin: 0 1px;
+    }
+
+    .host {
+      color: #98d982;
+      font-weight: 500;
+    }
+
+    .path {
+      color: #ffd93d;
+      font-weight: 500;
+      margin-left: 8px;
+    }
+
+    .dollar {
+      color: #ffffff;
+      margin: 0 8px 0 8px;
+      font-weight: 600;
+    }
+
+    .command {
+      color: #ffffff;
+      font-weight: 400;
+    }
+
+    .output {
+      margin-left: 0;
+      margin-bottom: 8px;
+      white-space: pre-wrap;
+    }
+
+    .todo-unchecked {
+      color: #ff6b6b;
+    }
+
+    .todo-checked {
+      color: #51cf66;
+    }
+
+    .success-message {
+      color: #51cf66;
+    }
+
+    .typed-cursor {
+      display: inline-block;
+      color: var(--cursor-color);
+      font-weight: 400;
+      animation: blink 1s steps(1) infinite;
+      margin-left: 1px;
+    }
+
+    @keyframes blink {
+      0%, 50% { opacity: 1; }
+      51%, 100% { opacity: 0; }
+    }
+  </style>
+
+  <!-- Terminal Script -->
+  <script>
+    class TodoTerminal {
+      constructor() {
+        this.todos = [];
+        this.currentId = 0;
+        this.terminalContent = document.getElementById("terminal-content");
+        this.currentLine = null;
+        this.isTyping = false;
+
+        this.commands = [
+          {
+            cmd: 'todo add "create api_controller"',
+            type: "add",
+            task: "create api_controller",
+          },
+          {
+            cmd: 'todo add "commit new feature"',
+            type: "add",
+            task: "commit new feature",
+          },
+          { cmd: "todo ls", type: "list" },
+          { cmd: "todo rm 0", type: "remove", id: 0 },
+          { cmd: "todo check 0", type: "check", id: 0 },
+          { cmd: "todo ls", type: "list" },
+        ];
+
+        this.currentCommandIndex = 0;
+        this.start();
+      }
+
+      createPrompt() {
+        return `<span class="user">user</span><span class="separator">@</span><span class="host">dev-server</span> <span class="path">~</span> <span class="dollar">%</span> `;
+      }
+
+      addLine(isCommand = true) {
+        const line = document.createElement("div");
+        line.className = "terminal-line";
+
+        if (isCommand) {
+          line.innerHTML =
+            this.createPrompt() + '<span class="command"></span>';
+          this.currentLine = line.querySelector(".command");
+        } else {
+          line.className = "output";
+          this.currentLine = line;
+        }
+
+        this.terminalContent.appendChild(line);
+        return line;
+      }
+
+      typeText(text, speed = 50) {
+        return new Promise((resolve) => {
+          let i = 0;
+          const cursor = document.createElement("span");
+          cursor.className = "typed-cursor";
+          cursor.textContent = "█";
+          this.currentLine.appendChild(cursor);
+
+          const typeChar = () => {
+            if (i < text.length) {
+              this.currentLine.insertBefore(
+                document.createTextNode(text[i]),
+                cursor,
+              );
+              i++;
+              setTimeout(typeChar, speed + Math.random() * 20);
+            } else {
+              cursor.remove();
+              resolve();
+            }
+          };
+
+          setTimeout(typeChar, 200);
+        });
+      }
+
+      executeCommand(commandObj) {
+        switch (commandObj.type) {
+          case "add":
+            this.todos.push({
+              id: this.currentId++,
+              task: commandObj.task,
+              completed: false,
+            });
+            break;
+
+          case "list":
+            return this.todos
+              .map(
+                (todo) =>
+                  `- [${todo.completed ? "X" : " "}] ${todo.task} id: ${todo.id}`,
+              )
+              .join("\n");
+
+          case "remove":
+            const todoToRemove = this.todos.find(
+              (t) => t.id === commandObj.id,
+            );
+            if (todoToRemove) {
+              this.todos = this.todos.filter((t) => t.id !== commandObj.id);
+              // Reassign IDs after removal
+              this.todos.forEach((todo, index) => {
+                todo.id = index;
+              });
+              this.currentId = this.todos.length;
+              return `Task "${todoToRemove.task}" was removed!`;
+            }
+            break;
+
+          case "check":
+            const todoToCheck = this.todos.find(
+              (t) => t.id === commandObj.id,
+            );
+            if (todoToCheck) {
+              todoToCheck.completed = true;
+              return `Task "${todoToCheck.task}" was marked as checked!`;
+            }
+            break;
+        }
+        return null;
+      }
+
+      async runCommand() {
+        if (this.currentCommandIndex >= this.commands.length) {
+          this.currentCommandIndex = 0;
+          this.todos = [];
+          this.currentId = 0;
+          // Clear terminal and restart
+          setTimeout(() => {
+            this.terminalContent.innerHTML = "";
+            this.runCommand();
+          }, 2000);
+          return;
+        }
+
+        const commandObj = this.commands[this.currentCommandIndex];
+
+        // Type the command
+        this.addLine(true);
+        await this.typeText(commandObj.cmd, 55);
+
+        // Execute and show output
+        const output = this.executeCommand(commandObj);
+
+        if (output) {
+          this.addLine(false);
+          if (commandObj.type === "list") {
+            // Add each todo item with proper styling
+            const lines = output.split("\n");
+            for (let line of lines) {
+              const todoLine = document.createElement("div");
+              if (line.includes("[X]")) {
+                todoLine.innerHTML = `<span class="todo-checked">${line}</span>`;
+              } else {
+                todoLine.innerHTML = `<span class="todo-unchecked">${line}</span>`;
+              }
+              this.terminalContent.appendChild(todoLine);
+            }
+          } else if (
+            commandObj.type === "remove" ||
+            commandObj.type === "check"
+          ) {
+            const successLine = document.createElement("div");
+            successLine.innerHTML = `<span class="success-message">${output}</span>`;
+            this.terminalContent.appendChild(successLine);
+          }
+        }
+
+        this.currentCommandIndex++;
+
+        // Scroll to bottom
+        this.terminalContent.scrollTop = this.terminalContent.scrollHeight;
+
+        // Wait before next command
+        setTimeout(
+          () => this.runCommand(),
+          commandObj.type === "list" ? 2500 : 1500,
+        );
+      }
+
+      async start() {
+        await new Promise((resolve) => setTimeout(resolve, 500));
+        this.runCommand();
+      }
+    }
+
+    window.addEventListener("load", function () {
+      new TodoTerminal();
+    });
+  </script>
 {{ end }}

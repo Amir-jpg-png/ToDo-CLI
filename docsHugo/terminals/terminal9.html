@@ -1,0 +1,256 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>iTerm2 Terminal</title>
+  </head>
+  <body>
+    <div class="mac-background">
+      <div class="mac-terminal">
+        <div class="terminal-header">
+          <div class="traffic-lights">
+            <span class="btn red"></span>
+            <span class="btn yellow"></span>
+            <span class="btn green"></span>
+          </div>
+          <span class="title">name — zsh — 116×29</span>
+        </div>
+        <div class="terminal-body">
+          <div class="terminal-line">
+            <span class="prompt">
+              <span class="user">name</span><span class="separator">@</span
+              ><span class="host">Names-MacBook-Pro</span>
+              <span class="path">~</span> <span class="dollar">%</span>
+            </span>
+            <span id="typed-output"></span>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <style>
+      :root {
+        --term-width: 928px;
+        --term-height: 550px;
+        --header-h: 36px;
+        --term-bg: #1d1d1d;
+        --font:
+          "SF Mono", Menlo, Monaco, "Cascadia Code", "Roboto Mono", Consolas,
+          "Courier New", monospace;
+        --cursor-color: #ffffff;
+      }
+
+      * {
+        box-sizing: border-box;
+      }
+
+      body {
+        margin: 0;
+        padding: 0;
+      }
+
+      /* Full-screen Mac background */
+      .mac-background {
+        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        height: 100vh;
+        width: 100vw;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        padding: 20px;
+      }
+
+      /* Terminal window */
+      .mac-terminal {
+        width: var(--term-width);
+        max-width: 100%;
+        height: var(--term-height);
+        border-radius: 12px;
+        overflow: hidden;
+        font-family: var(--font);
+        box-shadow:
+          0 20px 60px rgba(0, 0, 0, 0.3),
+          0 0 0 1px rgba(255, 255, 255, 0.1);
+        display: flex;
+        flex-direction: column;
+        backdrop-filter: blur(20px);
+      }
+
+      /* Title bar */
+      .terminal-header {
+        background: linear-gradient(180deg, #3c3c3c 0%, #2d2d2d 100%);
+        height: var(--header-h);
+        display: flex;
+        align-items: center;
+        padding: 0 16px;
+        position: relative;
+        border-bottom: 1px solid #1a1a1a;
+      }
+
+      .traffic-lights {
+        display: flex;
+        align-items: center;
+        gap: 8px;
+      }
+
+      .btn {
+        height: 12px;
+        width: 12px;
+        border-radius: 50%;
+        display: inline-block;
+        position: relative;
+        border: 0.5px solid rgba(0, 0, 0, 0.2);
+      }
+
+      .red {
+        background: linear-gradient(135deg, #ff6b5a 0%, #ff4136 100%);
+      }
+
+      .yellow {
+        background: linear-gradient(135deg, #ffdc3c 0%, #ffb700 100%);
+      }
+
+      .green {
+        background: linear-gradient(135deg, #28d940 0%, #20c933 100%);
+      }
+
+      .title {
+        position: absolute;
+        left: 50%;
+        transform: translateX(-50%);
+        font-size: 13px;
+        font-weight: 500;
+        color: #cccccc;
+        letter-spacing: 0.2px;
+      }
+
+      /* Terminal body */
+      .terminal-body {
+        background: var(--term-bg);
+        color: #ffffff;
+        padding: 16px 20px;
+        height: calc(var(--term-height) - var(--header-h));
+        overflow: hidden;
+        font-size: 14px;
+        line-height: 20px;
+        font-weight: 400;
+        position: relative;
+      }
+
+      .terminal-line {
+        display: flex;
+        align-items: baseline;
+      }
+
+      /* Prompt style - more authentic iTerm2/zsh styling */
+      .prompt {
+        display: flex;
+        align-items: baseline;
+        flex-shrink: 0;
+      }
+
+      .user {
+        color: #61dafb;
+        font-weight: 500;
+      }
+
+      .separator {
+        color: #ffffff;
+        margin: 0 1px;
+      }
+
+      .host {
+        color: #98d982;
+        font-weight: 500;
+      }
+
+      .path {
+        color: #ffd93d;
+        font-weight: 500;
+        margin-left: 8px;
+      }
+
+      .dollar {
+        color: #ffffff;
+        margin: 0 8px 0 8px;
+        font-weight: 600;
+      }
+
+      #typed-output {
+        color: #ffffff;
+        font-weight: 400;
+      }
+
+      /* Cursor styling */
+      .typed-cursor {
+        display: inline-block;
+        color: var(--cursor-color);
+        font-weight: 400;
+        animation: blink 1s steps(1) infinite;
+        margin-left: 1px;
+      }
+
+      @keyframes blink {
+        0%,
+        50% {
+          opacity: 1;
+        }
+        51%,
+        100% {
+          opacity: 0;
+        }
+      }
+
+      /* Responsive adjustments */
+      @media (max-width: 1000px) {
+        :root {
+          --term-width: 90vw;
+          --term-height: 70vh;
+        }
+
+        .terminal-body {
+          font-size: 13px;
+          padding: 12px 16px;
+        }
+      }
+    </style>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/typed.js/2.0.12/typed.min.js"></script>
+    <script>
+      window.addEventListener("load", function () {
+        console.log("Page loaded, initializing Typed.js");
+
+        const targetElement = document.getElementById("typed-output");
+        console.log("Target element:", targetElement);
+
+        if (targetElement) {
+          const typed = new Typed("#typed-output", {
+            strings: [
+              " todo add",
+              ' todo add "create api_controller"',
+              " todo ls",
+              " todo rm 1",
+              " todo check 1",
+              " git status",
+              " npm run dev",
+              " code .",
+            ],
+            typeSpeed: 55,
+            backSpeed: 35,
+            backDelay: 900,
+            startDelay: 500,
+            loop: true,
+            showCursor: true,
+            cursorChar: "█",
+            onBegin: function () {
+              console.log("Typing started");
+            },
+          });
+        } else {
+          console.error("Target element #typed-output not found");
+        }
+      });
+    </script>
+  </body>
+</html>

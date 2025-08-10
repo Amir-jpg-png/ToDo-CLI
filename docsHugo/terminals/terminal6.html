@@ -1,0 +1,167 @@
+<!-- mac-terminal-with-stacked-prompt.html -->
+<div class="mac-background">
+  <div class="mac-terminal" role="group" aria-label="Terminal">
+    <div class="terminal-header">
+      <span class="btn red"></span>
+      <span class="btn yellow"></span>
+      <span class="btn green"></span>
+      <span class="title">iTerm2 — bash — 116x29</span>
+    </div>
+
+    <div class="terminal-body">
+      <div class="prompt-block" aria-hidden="true">
+        <div class="prompt-line line1">MacBook-Pro:todo</div>
+        <div class="prompt-line line2">user</div>
+        <div class="prompt-line line3">
+          <span class="symbol">$</span>
+          <span id="typed-output" class="typed-output"></span>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<style>
+  :root {
+    --term-width: 928px; /* 116 cols */
+    --term-height: 550px; /* ~29 rows + header/padding */
+    --header-h: 28px;
+    --term-bg: #1e1e1e;
+    --font: Menlo, Monaco, "Courier New", monospace;
+  }
+
+  .mac-background {
+    background: url("https://images.unsplash.com/photo-1506748686214-e9df14d4d9d0?ixlib=rb-4.0.3&auto=format&fit=crop&w=1950&q=80")
+      center/cover no-repeat;
+    height: 100vh;
+    width: 100vw;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+  }
+
+  .mac-terminal {
+    width: var(--term-width);
+    height: var(--term-height);
+    border-radius: 8px;
+    overflow: hidden;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.45);
+    font-family: var(--font);
+    display: flex;
+    flex-direction: column;
+  }
+
+  /* title bar */
+  .terminal-header {
+    height: var(--header-h);
+    background: #ddd;
+    display: flex;
+    align-items: center;
+    padding: 0 10px;
+    position: relative;
+  }
+  .btn {
+    height: 12px;
+    width: 12px;
+    border-radius: 50%;
+    margin-right: 6px;
+    display: inline-block;
+  }
+  .red {
+    background: #ff5f56;
+  }
+  .yellow {
+    background: #ffbd2e;
+  }
+  .green {
+    background: #27c93f;
+  }
+  .title {
+    position: absolute;
+    left: 50%;
+    transform: translateX(-50%);
+    font-size: 12px;
+    color: #555;
+  }
+
+  /* terminal body (fixed area, not centered) */
+  .terminal-body {
+    background: var(--term-bg);
+    color: #e6e6e6;
+    padding: 12px 16px;
+    box-sizing: border-box;
+    height: calc(var(--term-height) - var(--header-h)); /* remaining space */
+    overflow: hidden;
+    white-space: pre; /* preserve spacing */
+    font-size: 14px;
+    line-height: 18px; /* approx terminal row height */
+  }
+
+  /* prompt block: stacked prompt lines (left aligned) */
+  .prompt-block {
+    text-align: left;
+  }
+
+  /* replicate the leading spaces you showed using left margins */
+  .prompt-line {
+    font-family: var(--font);
+    color: #bfc7d5; /* iTerm-like light text for prompt */
+    margin: 0;
+    padding: 0;
+  }
+  .line1 {
+    margin-left: 32px;
+  } /* "    MacBook-Pro:todo" */
+  .line2 {
+    margin-left: 40px;
+  } /* "     user" (slightly indented) */
+  .line3 {
+    margin-left: 32px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    color: #ffffff;
+  }
+
+  /* $ symbol look */
+  .symbol {
+    color: #ffffff;
+    font-weight: 600;
+    margin-right: 6px;
+  }
+
+  /* typed output and blinking cursor */
+  .typed-output {
+    color: #ffffff;
+    font-family: var(--font);
+  }
+  .typed-cursor {
+    display: inline-block;
+    margin-left: 2px;
+    font-weight: 700;
+    color: #ffffff;
+    opacity: 1;
+    animation: blink 1s steps(1) infinite;
+  }
+
+  /* blink animation */
+  @keyframes blink {
+    50% {
+      opacity: 0;
+    }
+  }
+</style>
+
+<script src="https://cdn.jsdelivr.net/npm/typed.js@2.0.12"></script>
+<script>
+  /* Strings must NOT include leading spaces; typed text will appear right after the $ */
+  new Typed("#typed-output", {
+    strings: ['todo add "Buy milk"', "todo list", "todo remove 1", "todo"],
+    typeSpeed: 55,
+    backSpeed: 35,
+    backDelay: 900,
+    loop: true,
+    showCursor: true,
+    cursorChar: "█",
+  });
+</script>

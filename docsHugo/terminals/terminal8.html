@@ -1,0 +1,149 @@
+<div class="mac-background">
+  <div class="mac-terminal">
+    <div class="terminal-header">
+      <span class="btn red"></span>
+      <span class="btn yellow"></span>
+      <span class="btn green"></span>
+      <span class="title">iTerm2 — bash — 116x29</span>
+    </div>
+    <div class="terminal-body">
+      <span class="prompt">
+        <span class="user">name</span>@<span class="host"
+          >Names-MacBook-Pro</span
+        >
+        $<span id="typed-output"></span>
+      </span>
+    </div>
+  </div>
+</div>
+
+<style>
+  :root {
+    --term-width: 928px; /* 116 cols */
+    --term-height: 550px; /* ~29 rows */
+    --header-h: 28px;
+    --term-bg: #1e1e1e;
+    --font: Menlo, Monaco, "Courier New", monospace;
+  }
+
+  /* Full-screen Mac background */
+  .mac-background {
+    background: url("https://images.unsplash.com/photo-1506748686214-e9df14d4d9d0?ixlib=rb-4.0.3&auto=format&fit=crop&w=1950&q=80")
+      center/cover no-repeat;
+    height: 100vh;
+    width: 100vw;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+  }
+
+  /* Terminal window */
+  .mac-terminal {
+    width: var(--term-width);
+    height: var(--term-height);
+    border-radius: 8px;
+    overflow: hidden;
+    font-family: var(--font);
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.45);
+    display: flex;
+    flex-direction: column;
+  }
+
+  /* Title bar */
+  .terminal-header {
+    background: #ddd;
+    height: var(--header-h);
+    display: flex;
+    align-items: center;
+    padding: 0 10px;
+    position: relative;
+  }
+
+  .btn {
+    height: 12px;
+    width: 12px;
+    border-radius: 50%;
+    margin-right: 6px;
+    display: inline-block;
+  }
+  .red {
+    background: #ff5f56;
+  }
+  .yellow {
+    background: #ffbd2e;
+  }
+  .green {
+    background: #27c93f;
+  }
+
+  .title {
+    position: absolute;
+    left: 50%;
+    transform: translateX(-50%);
+    font-size: 12px;
+    color: #555;
+  }
+
+  /* Terminal body */
+  .terminal-body {
+    background: var(--term-bg);
+    color: #e6e6e6;
+    padding: 12px 16px;
+    box-sizing: border-box;
+    height: calc(var(--term-height) - var(--header-h));
+    overflow: hidden;
+    white-space: pre;
+    font-size: 14px;
+    line-height: 18px;
+  }
+
+  /* Prompt style */
+  .prompt {
+    color: #ffffff;
+    font-weight: 500;
+  }
+  .user {
+    color: #ffffff;
+    margin-bottom: 20px;
+  }
+  .host {
+    color: #ffffff;
+  }
+  .prompt #typed-output {
+    color: #ffffff;
+    margin-left: 1px;
+  }
+
+  /* Cursor blink */
+  .typed-cursor {
+    display: inline-block;
+    margin-left: 2px;
+    font-weight: 700;
+    color: #ffffff;
+    animation: blink 1s steps(1) infinite;
+  }
+  @keyframes blink {
+    50% {
+      opacity: 0;
+    }
+  }
+</style>
+
+<script src="https://cdn.jsdelivr.net/npm/typed.js@2.0.12"></script>
+<script>
+  new Typed("#typed-output", {
+    strings: [
+      " todo add",
+      'todo add "create api_controller"',
+      " todo ls",
+      " todo rm 1",
+      " todo check 1",
+    ],
+    typeSpeed: 55,
+    backSpeed: 35,
+    backDelay: 900,
+    loop: true,
+    showCursor: true,
+    cursorChar: "█",
+  });
+</script>
