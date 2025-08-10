@@ -30,13 +30,14 @@
 
 [[main]]
   name = "Docs"
-  url = "https://amir-jpg-png.github.io/ToDo-CLI/docs/guides/installation-guide/"
-# url = "/docs/1.0/prologue/introduction/"
+  url = "https://amir-jpg-png.github.io/ToDo-CLI/docs/guides/installation-guide/" # Original GitHub Pages URL for deployment
+  # url = "/docs/guides/installation-guide/"
   weight = 10
 
 [[main]]
   name = "Blog"
-  url = "https://amir-jpg-png.github.io/ToDo-CLI/blog/"
+  url = "https://amir-jpg-png.github.io/ToDo-CLI/blog/" # Original GitHub Pages URL for deployment
+  # url = "/blog/"
   weight = 30
 
 # [[social]]
@@ -81,7 +82,8 @@
 
 [[footer]]
   name = "Privacy Policy"
-  url = "https://amir-jpg-png.github.io/ToDo-CLI/privacy/"
+  url = "https://amir-jpg-png.github.io/ToDo-CLI/privacy/" # Original GitHub Pages URL for deployment
+  # url = "/privacy/"
   weight = 10
 
 # [[footer]]

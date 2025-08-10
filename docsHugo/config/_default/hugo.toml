@@ -1,5 +1,6 @@
 title = "ToDo-CLI"
-baseURL = "https://amir-jpg-png.github.io/ToDo-CLI/"
+baseURL = "https://amir-jpg-png.github.io/ToDo-CLI/" # Original GitHub Pages URL for deployment
+# baseURL = "http://localhost:1313/"
 canonifyURLs = false
 relativeURLs = false
 disableAliases = true

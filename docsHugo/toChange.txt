@@ -1,0 +1,56 @@
+FILES CHANGED FOR LOCAL DEVELOPMENT
+=====================================
+
+When deploying to GitHub Pages, you need to revert the following changes:
+
+1. config/_default/hugo.toml
+   - Change baseURL back from "http://localhost:1313/" to "https://amir-jpg-png.github.io/ToDo-CLI/"
+   - Uncomment the original GitHub Pages baseURL line
+
+2. config/_default/menus/menus.en.toml  
+   - Change Docs URL back from "/docs/guides/installation-guide/" to "https://amir-jpg-png.github.io/ToDo-CLI/docs/guides/installation-guide/"
+   - Change Blog URL back from "/blog/" to "https://amir-jpg-png.github.io/ToDo-CLI/blog/"
+   - Change Privacy Policy URL back from "/privacy/" to "https://amir-jpg-png.github.io/ToDo-CLI/privacy/"
+   - Uncomment the original GitHub Pages URLs
+
+3. layouts/home.html
+   - Change the "Get Started" button href back from "/docs/..." to "https://amir-jpg-png.github.io/ToDo-CLI/docs/..."
+   - Uncomment the original GitHub Pages URL
+
+4. terminals/terminal2.html
+   - Change background from gradient back to "https://upload.wikimedia.org/wikipedia/commons/3/3e/MacOS_Ventura_Wallpaper_Orange_and_Blue.png"
+
+5. terminals/terminal3.html
+   - Change background from gradient back to "https://upload.wikimedia.org/wikipedia/commons/thumb/3/3e/MacOS_Ventura_Wallpaper_Orange_and_Blue.png/1920px-MacOS_Ventura_Wallpaper_Orange_and_Blue.png"
+
+6. terminals/terminal4.html
+   - Change background from gradient back to "https://images.unsplash.com/photo-1506748686214-e9df14d4d9d0?ixlib=rb-4.0.3&auto=format&fit=crop&w=1950&q=80"
+
+7. terminals/terminal5.html
+   - Change background from gradient back to "https://images.unsplash.com/photo-1506748686214-e9df14d4d9d0?ixlib=rb-4.0.3&auto=format&fit=crop&w=1950&q=80"
+
+8. terminals/terminal6.html
+   - Change background from gradient back to "https://images.unsplash.com/photo-1506748686214-e9df14d4d9d0?ixlib=rb-4.0.3&auto=format&fit=crop&w=1950&q=80"
+
+9. terminals/terminal7.html
+   - Change background from gradient back to "https://images.unsplash.com/photo-1506748686214-e9df14d4d9d0?ixlib=rb-4.0.3&auto=format&fit=crop&w=1950&q=80"
+
+10. terminals/terminal8.html
+    - Change background from gradient back to "https://images.unsplash.com/photo-1506748686214-e9df14d4d9d0?ixlib=rb-4.0.3&auto=format&fit=crop&w=1950&q=80"
+
+INSTRUCTIONS FOR DEPLOYMENT:
+============================
+
+Look for commented lines in each file that start with:
+- "Original GitHub Pages URL for deployment"
+- "Original Unsplash background for deployment"  
+- "Original Wikimedia background for deployment"
+
+These comments contain the original URLs that should be uncommented and used for deployment, while the localhost/relative URLs should be commented out or removed.
+
+The main files that affect site navigation are:
+- config/_default/hugo.toml (baseURL)
+- config/_default/menus/menus.en.toml (menu links)
+- layouts/home.html (Get Started button)
+
+Terminal files only affect visual backgrounds and can be left as-is if needed.
