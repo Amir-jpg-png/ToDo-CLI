@@ -4,6 +4,17 @@ import os
 from sys import argv
 
 
+class colors:
+    ERROR = "\033[0;31m"
+    END = "\33[0m"
+    SUCCESS = "\33[0;32m"
+    WARNING = "\33[0;33m"
+
+
+def colorPrinter(message, color):
+    print(color + message + colors.END)
+
+
 def main():
     flags = ["add", "rm", "ls", "check", "--help"]
     current_dir = os.getcwd()
@@ -11,13 +22,16 @@ def main():
     tasks = load_tasks(todo_file)
 
     if len(argv) <= 1:
-        print("Please enter a flag or enter todo --help to find a list of all options.")
+        colorPrinter(
+            "Please enter a flag or enter todo --help to find a list of all options.",
+            colors.WARNING,
+        )
         return
 
     flag = argv[1]
 
     if flag not in flags:
-        print(f"{flag} is not a valid flag.")
+        colorPrinter(f"{flag} is not a valid flag.", colors.WARNING)
         return
 
     if flag == "--help":
@@ -35,34 +49,39 @@ def main():
     if flag == "ls":
         print()
         if len(tasks) == 0:
-            print("No tasks created yet!")
+            colorPrinter("No tasks created yet!", colors.ERROR)
         for i in range(len(tasks)):
             task = tasks[i]
             if task["completed"] is True:
                 marker = "- [X]"
+                color = colors.SUCCESS
             else:
                 marker = "- [ ]"
-            print(f'{marker} {task["name"]} id: {i}')
+                color = ""
+            print(color + f'{marker} {task["name"]} id: {i}' + colors.END)
         return
     if flag == "add":
         if len(argv) <= 2:
-            print("Please specify a task to add.")
+            colorPrinter("Please specify a task to add.", colors.WARNING)
             return
         task = {}
         task["name"] = argv[2]
         task["completed"] = False
         tasks.append(task)
         save_tasks(todo_file, tasks)
+        colorPrinter(f'{task["name"]} was added to tasks successfully!', colors.SUCCESS)
         return
     if flag == "check":
         if len(argv) <= 2:
-            print("Please specify the id of the task to mark as checked.")
+            colorPrinter(
+                "Please specify the id of the task to mark as checked.", colors.WARNING
+            )
             return
         check_task(argv[2], tasks, todo_file)
         return
     if flag == "rm":
         if len(argv) <= 2:
-            print("Please specify the id of the task to remove.")
+            colorPrinter("Please specify the id of the task to remove.", colors.WARNING)
             return
         remove_task(argv[2], tasks, todo_file)
 
@@ -87,30 +106,30 @@ def check_task(id, tasks, filepath):
     try:
         id = int(id)
     except ValueError:
-        print("Please enter a valid nummeric id!")
+        colorPrinter("Please enter a valid nummeric id!", colors.WARNING)
         return
     if id < 0 or id >= len(tasks):
-        print("No task with that id found!")
+        colorPrinter("No task with that id found!", colors.ERROR)
         return
     task = tasks[id]
     task["completed"] = True
     save_tasks(filepath, tasks)
-    print(f'Task "{task["name"]}" was marked as checked!')
+    print(colors.SUCCESS + f'Task "{task["name"]}" was marked as checked!' + colors.END)
 
 
 def remove_task(id, tasks, filepath):
     try:
         id = int(id)
     except ValueError:
-        print("Please enter a valid nummeric id!")
+        colorPrinter("Please enter a valid nummeric id!", colors.WARNING)
         return
     if id < 0 or id >= len(tasks):
-        print("No task with that id found!")
+        colorPrinter("No task with that id found!", colors.ERROR)
         return
     name = tasks[id]["name"]
     tasks.pop(id)
     save_tasks(filepath, tasks)
-    print(f'Task "{name}" was removed!')
+    colorPrinter(f'Task "{name}" was removed!', colors.SUCCESS)
 
 
 if __name__ == "__main__":
