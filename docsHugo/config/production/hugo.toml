@@ -1,2 +1,3 @@
 # Overrides for production environment
 # baseurl configured in main hugo.toml
+baseURL = "https://amir-jpg-png.github.io/ToDo-CLI/"
