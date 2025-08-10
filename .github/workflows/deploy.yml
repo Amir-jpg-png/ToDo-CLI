@@ -26,7 +26,6 @@ concurrency:
 defaults:
   run:
     shell: bash
-    working-directory: ./docsHugo
 
 jobs:
   # Build job
@@ -56,8 +55,10 @@ jobs:
         id: pages
         uses: actions/configure-pages@v4
       - name: Install dependencies
+        working-directory: ./docsHugo
         run: npm ci
       - name: Build production website
+        working-directory: ./docsHugo
         env:
           # For maximum backward compatibility with Hugo modules
           HUGO_ENVIRONMENT: production
