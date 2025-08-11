@@ -6,8 +6,7 @@
     </div>
     <div class="col-lg-9 col-xl-8 text-center">
       <p class="lead">{{ .Params.lead | safeHTML }}</p>
-      <!-- <a class="btn btn-primary btn-cta rounded-pill btn-lg my-3" href="https://amir-jpg-png.github.io/ToDo-CLI/docs/{{ if site.Params.doks.docsVersioning }}{{ site.Params.doks.docsVersion }}/{{ end }}guides/installation-guide/" role="button">{{ i18n "get_started" }}</a> Original GitHub Pages URL for deployment -->
-      <a class="btn btn-primary btn-cta rounded-pill btn-lg my-3" href="/docs/{{ if site.Params.doks.docsVersioning }}{{ site.Params.doks.docsVersion }}/{{ end }}guides/installation-guide/" role="button">{{ i18n "get_started" }}</a>
+      <a class="btn btn-primary btn-cta rounded-pill btn-lg my-3" href="{{ "docs/guides/installation/" | relURL }}" role="button">{{ i18n "get_started" }}</a>
       {{ .Content }}
     </div>
   </div>
@@ -70,8 +69,7 @@
         </div>
         <div class="col-lg-5">
           <h2 class="h4">Read the docs</h2>
-          <!-- <p>Learn more in the <a href="https://amir-jpg-png.github.io/ToDo-CLI/docs">Docs</a>.</p> Original GitHub Pages URL for deployment -->
-          <p>Learn more in the <a href="/docs">Docs</a>.</p>
+          <p>Learn more in the <a href="{{ "docs" | relURL }}">Docs</a>.</p>
         </div>
       </div>
     </div>
