@@ -140,35 +140,5 @@ def main():
             exit(1)
 
 
-# def check_task(id, tasks, filepath):
-#     try:
-#         id = int(id)
-#     except ValueError:
-#         coloredText("Please enter a valid nummeric id!", COLORS["WARNING"])
-#         return
-#     if id < 0 or id >= len(tasks):
-#         coloredText("No task with that id found!", COLORS["ERROR"])
-#         return
-#     task = tasks[id]
-#     task["completed"] = True
-#     save_tasks(filepath, tasks)
-#     coloredText(f'Task "{task["name"]}" was marked as checked!', COLORS["SUCCESS"])
-
-
-# def remove_task(id, tasks, filepath):
-#     try:
-#         id = int(id)
-#     except ValueError:
-#         coloredText("Please enter a valid nummeric id!", COLORS["WARNING"])
-#         return
-#     if id < 0 or id >= len(tasks):
-#         coloredText("No task with that id found!", COLORS["ERROR"])
-#         return
-#     name = tasks[id]["name"]
-#     tasks.pop(id)
-#     save_tasks(filepath, tasks)
-#     coloredText(f'Task "{name}" was removed!', COLORS["SUCCESS"])
-
-
 if __name__ == "__main__":
     main()
