@@ -5,7 +5,7 @@ from utils import coloredText, TaskList
 
 app = typer.Typer()
 
-VERSION = 1.2
+VERSION = 1.3
 COLORS = {
     "ERROR": "red",
     "WARNING": "yellow",
