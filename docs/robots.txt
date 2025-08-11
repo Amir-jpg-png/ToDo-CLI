@@ -1,3 +1,0 @@
-User-agent: *
-Disallow: /admin/
-Sitemap: https://amir-jpg-png.github.io/sitemap.xml

@@ -6,6 +6,7 @@
       "aside",
       "base",
       "body",
+      "br",
       "button",
       "circle",
       "code",
@@ -68,11 +69,13 @@
       "btn-close",
       "btn-cta",
       "btn-lg",
+      "btn-light",
       "btn-link",
       "btn-primary",
       "card",
       "card-body",
       "card-list",
+      "card-terms",
       "categories",
       "chroma",
       "col-lg-10",
@@ -146,6 +149,7 @@
       "justify-content-end",
       "justify-content-start",
       "lead",
+      "link-muted",
       "list",
       "list-inline",
       "list-inline-item",
@@ -231,8 +235,10 @@
       "sticky-top",
       "stretched-link",
       "submitted",
+      "tag-list-single",
       "tags",
       "taxonomy",
+      "term",
       "terminal-body",
       "terminal-demo-section",
       "terminal-header",
@@ -258,7 +264,9 @@
     ],
     "ids": [
       "TableOfContents",
+      "ansi-escape-codes",
       "buttonColorMode",
+      "colors-in-our-cli",
       "commands",
       "doks-docs-nav",
       "future-plans",
@@ -286,7 +294,8 @@
       "todo-ls",
       "todo-rm-id",
       "verify-installation",
-      "what-this-command-does"
+      "what-this-command-does",
+      "whats-happening-under-the-hood"
     ]
   }
 }
