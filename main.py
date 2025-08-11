@@ -42,7 +42,7 @@ def ls():
         raise typer.Exit(code=1)
 
     for id, task in tasks:
-        if task.completed:
+        if task.checked():
             coloredText(f"- [X] {task.name} id: {id}", COLORS["SUCCESS"])
         else:
             typer.echo(f"- [ ] {task.name} id: {id}")
@@ -53,6 +53,15 @@ def check(task_id: str):
     tasks = get_task_list()
     if tasks.check(task_id):
         coloredText("Checked task successfully.", COLORS["SUCCESS"])
+    else:
+        raise typer.Exit(code=1)
+
+@app.command()
+def uncheck(task_id: str):
+    """Mark a task as open"""
+    tasks = get_task_list()
+    if tasks.uncheck(task_id):
+        coloredText("Unchecked task successfully.", COLORS["SUCCESS"])
     else:
         raise typer.Exit(code=1)
 
@@ -69,6 +78,7 @@ def help():
     typer.echo("  todo rm <id>         Remove a task by ID")
     typer.echo("  todo ls              List all tasks")
     typer.echo("  todo check <id>      Mark a task as completed")
+    typer.echo("  todo uncheck <id>    Mark a task as open")
     typer.echo("  todo --version, -v   Show version")
     typer.echo("  todo --help          Show this help message")
 
