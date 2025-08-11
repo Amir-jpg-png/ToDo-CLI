@@ -1,7 +1,9 @@
 #!/usr/bin/env python3
 import os
-from sys import argv
+import typer
 from utils import coloredText, TaskList
+
+app = typer.Typer()
 
 VERSION = 1.2
 COLORS = {
@@ -10,73 +12,65 @@ COLORS = {
     "SUCCESS": "green",
 }
 
-def main():
-    """Entry point of programm"""
-    flags = ["add", "rm", "ls", "check", "--help", "--version", "-v"]
+def get_task_list():
     current_dir = os.getcwd()
     todo_file = os.path.join(current_dir, ".todo.json")
-    tasks = TaskList(todo_file)
+    return TaskList(todo_file)
 
-    if len(argv) <= 1:
-        coloredText(
-            "Please enter a flag or enter todo --help to find a list of all options.",
-            COLORS["WARNING"]
-        )
-        return
+@app.command()
+def add(task: str):
+    """Add a new task"""
+    tasks = get_task_list()
+    tasks.add(task)
+    coloredText(f'"{task}" was added successfully!', COLORS["SUCCESS"])
 
-    flag = argv[1]
+@app.command()
+def rm(task_id: str):
+    """Remove a task by ID"""
+    tasks = get_task_list()
+    if tasks.rm(task_id):
+        coloredText("Remove was successful.", COLORS["SUCCESS"])
+    else:
+        raise typer.Exit(code=1)
 
-    if flag not in flags:
-        coloredText(f"{flag} is not a valid flag.", COLORS["WARNING"])
-        exit(1)
+@app.command()
+def ls():
+    """List all tasks"""
+    tasks = get_task_list()
+    if tasks.is_empty():
+        coloredText("No tasks created yet!", COLORS["ERROR"])
+        raise typer.Exit(code=1)
 
-    if flag == "--help":
-        print()
-        print("Usage:")
-        print('  todo add "task"      Add a new task')
-        print("  todo rm <id>         Remove a task by ID")
-        print("  todo ls               List all tasks")
-        print("  todo check <id>      Mark a task as completed")
-        print("  todo --version, -v    Show version")
-        print("  todo --help           Show this help message")
-    elif flag == "ls":
-        print()
-        if tasks.is_empty():
-            coloredText("No tasks created yet!", COLORS["ERROR"])
-            exit(1)
-        for id, task in tasks:
-            if task.completed:
-                coloredText(f"- [X] {task.name} id: {id}", COLORS["SUCCESS"])
-            else:
-                print(f"- [ ] {task.name} id: {id}")
-    if flag in ["--version", "-v"]:
-        print(f"todo {VERSION}")
-    if flag == "add":
-        if len(argv) <= 2:
-            coloredText("Please specify a task to add.", COLORS["WARNING"])
-            exit(1)
-        tasks.add(argv[2])
-        coloredText(f'"{argv[2]}" was added successfully!', COLORS["SUCCESS"])
-        exit(0)
-    if flag == "check":
-        if len(argv) <= 2:
-            coloredText("Please specify the id of the task to mark as checked.", COLORS["WARNING"])
-            exit(1)
-        if tasks.check(argv[2]):
-            coloredText("Checked task successfully.", COLORS["SUCCESS"])
-            exit(0)
+    for id, task in tasks:
+        if task.completed:
+            coloredText(f"- [X] {task.name} id: {id}", COLORS["SUCCESS"])
         else:
-            exit(1)
-    if flag == "rm":
-        if len(argv) <= 2:
-            coloredText("Please specify the id of the task to remove.", COLORS["WARNING"])
-            exit(1)
-        if tasks.rm(argv[2]):
-            coloredText("Remove was successfully.", COLORS["SUCCESS"])
-            exit(0)
-        else:
-            exit(1)
+            typer.echo(f"- [ ] {task.name} id: {id}")
 
+@app.command()
+def check(task_id: str):
+    """Mark a task as completed"""
+    tasks = get_task_list()
+    if tasks.check(task_id):
+        coloredText("Checked task successfully.", COLORS["SUCCESS"])
+    else:
+        raise typer.Exit(code=1)
+
+@app.command()
+def version():
+    """Show version"""
+    typer.echo(f"todo {VERSION}")
+
+@app.command()
+def help():
+    """Show this help message"""
+    typer.echo("Usage:")
+    typer.echo('  todo add "task"      Add a new task')
+    typer.echo("  todo rm <id>         Remove a task by ID")
+    typer.echo("  todo ls              List all tasks")
+    typer.echo("  todo check <id>      Mark a task as completed")
+    typer.echo("  todo --version, -v   Show version")
+    typer.echo("  todo --help          Show this help message")
 
 if __name__ == "__main__":
-    main()
+    app()

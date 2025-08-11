@@ -18,7 +18,11 @@ def load_tasks(filepath: str) -> tuple[int, dict[str, "Task"]]:
                 return (0, {})
             data: dict = decode(json.loads(t))
             slot = 0 if not data else int(max(data.keys())) + 1
-            return (slot, data)
+
+            tasks = dict()
+            for id in data:
+                tasks[id] = data[id]
+            return (slot, tasks)
     except FileNotFoundError:
         return (0, dict())
 
@@ -50,8 +54,7 @@ class TaskList:
     def add(self, taskname: str) -> int:
         """Adds a new task to the list and returns the id"""
         self.tasks[str(self.lowestSlot)] = Task(taskname)
-        self.lowestSlot += 1
-        return self.lowestSlot - 1
+        return self.lowestSlot
 
     def rm(self, id: str) -> bool:
         """Removes the task with id `id`, if not possible, return false"""

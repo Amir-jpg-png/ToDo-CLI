@@ -1,2 +1,3 @@
 termcolor
 jsonpickle
+typer-slim
