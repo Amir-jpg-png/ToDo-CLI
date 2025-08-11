@@ -25,9 +25,17 @@ def coloredText(text: str, color: str) -> None:
     print(colored(text, color))
 
 
-def load_tasks(filepath: str) -> dict[str, "Task"]:
-    with open(filepath, "r") as f:
-        return decode(json.load(f))
+def load_tasks(filepath: str) -> tuple[int, dict[str, "Task"]]:
+    try:
+        with open(filepath, "r") as f:
+            t = f.read()
+            if not t.strip() or t == '"{}"':
+                return (0, {})
+            data: dict = decode(json.loads(t))
+            slot = 0 if not data else int(max(data.keys())) + 1
+            return (slot, data)
+    except FileNotFoundError:
+        return (0, dict())
 
 
 class Task:
@@ -45,9 +53,7 @@ class Task:
 class TaskList:
     def __init__(self, todo_file: str):
         self.file = todo_file
-        self.tasks: dict[str, Task] = load_tasks(self.file)
-        self.lowestSlot = int(max(self.tasks.keys())) + 1
-        """holds the lowest possible id value"""
+        self.lowestSlot, self.tasks = load_tasks(self.file)
 
     def __iter__(self):
         return iter(self.tasks.items())
