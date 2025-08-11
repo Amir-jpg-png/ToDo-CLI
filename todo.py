@@ -5,6 +5,14 @@ from sys import argv
 from jsonpickle import encode, decode
 from termcolor import colored
 
+VERSION = 1.2
+
+"""
+Version: 1.2 
+- added --version and -v flag 
+- improved --help flag
+"""
+
 
 COLORS = {
     "ERROR": "red",
@@ -76,7 +84,8 @@ class TaskList:
 
 
 def main():
-    flags = ["add", "rm", "ls", "check", "--help"]
+    """Entry point of programm"""
+    flags = ["add", "rm", "ls", "check", "--help", "--version", "-v"]
     current_dir = os.getcwd()
     todo_file = os.path.join(current_dir, ".todo.json")
     tasks = TaskList(todo_file)
@@ -96,23 +105,23 @@ def main():
 
     if flag == "--help":
         print()
-        for i in flags:
-            if i == "ls":
-                print(f"todo {i}")
-            elif i in ["rm", "check"]:
-                print(f'todo {i} "id"')
-            else:
-                print(f'todo {i} "task"')
-    if flag == "ls":
+        print("Usage:")
+        print('  todo add "task"      Add a new task')
+        print("  todo rm <id>         Remove a task by ID")
+        print("  todo ls               List all tasks")
+        print("  todo check <id>      Mark a task as completed")
+        print("  todo --version, -v    Show version")
+        print("  todo --help           Show this help message")
+    elif flag == "ls":
         print()
         if tasks.is_empty():
             coloredText("No tasks created yet!", COLORS["ERROR"])
+            exit(1)
         for id, task in tasks:
             if task.completed:
                 coloredText(f"- [X] {task.name} id: {id}", COLORS["SUCCESS"])
-            else:
-                print(f"- [ ] {task.name} id: {id}")
-        return
+    if flag in ["--version", "-v"]:
+        print(f"todo {VERSION}")
     if flag == "add":
         if len(argv) <= 2:
             coloredText("Please specify a task to add.", COLORS["WARNING"])
