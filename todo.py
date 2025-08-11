@@ -8,8 +8,8 @@ from termcolor import colored
 VERSION = 1.2
 
 """
-Version: 1.2 
-- added --version and -v flag 
+Version: 1.2
+- added --version and -v flag
 - improved --help flag
 """
 
@@ -120,6 +120,8 @@ def main():
         for id, task in tasks:
             if task.completed:
                 coloredText(f"- [X] {task.name} id: {id}", COLORS["SUCCESS"])
+            else:
+                print(f"- [ ] {task.name} id: {id}")
     if flag in ["--version", "-v"]:
         print(f"todo {VERSION}")
     if flag == "add":
