@@ -2,25 +2,91 @@
 import json
 import os
 from sys import argv
+from jsonpickle import encode, decode
+from termcolor import colored
 
 VERSION = 1.2
 
 """
-Version: 1.2 
-- added --version and -v flag 
+Version: 1.2
+- added --version and -v flag
 - improved --help flag
 """
 
 
-class colors:
-    ERROR = "\033[0;31m"
-    END = "\33[0m"
-    SUCCESS = "\33[0;32m"
-    WARNING = "\33[0;33m"
+COLORS = {
+    "ERROR": "red",
+    "WARNING": "yellow",
+    "SUCCESS": "green",
+}
 
 
-def colorPrinter(message, color):
-    print(color + message + colors.END)
+def coloredText(text: str, color: str) -> None:
+    print(colored(text, color))
+
+
+def load_tasks(filepath: str) -> tuple[int, dict[str, "Task"]]:
+    try:
+        with open(filepath, "r") as f:
+            t = f.read()
+            if not t.strip() or t == '"{}"':
+                return (0, {})
+            data: dict = decode(json.loads(t))
+            slot = 0 if not data else int(max(data.keys())) + 1
+            return (slot, data)
+    except FileNotFoundError:
+        return (0, dict())
+
+
+class Task:
+    def __init__(self, name: str, completed: bool = False):
+        self.name = name
+        self.completed = completed
+
+    def __repr__(self):
+        return f"Task(name={self.name}, completed={self.completed})"
+
+    def complete(self):
+        self.completed = True
+
+
+class TaskList:
+    def __init__(self, todo_file: str):
+        self.file = todo_file
+        self.lowestSlot, self.tasks = load_tasks(self.file)
+
+    def __iter__(self):
+        return iter(self.tasks.items())
+
+    def __del__(self):
+        with open(self.file, "w") as f:
+            json.dump(encode(self.tasks), f, indent=4)
+
+    def add(self, taskname: str) -> int:
+        """Adds a new task to the list and returns the id"""
+        self.tasks[str(self.lowestSlot)] = Task(taskname)
+        self.lowestSlot += 1
+        return self.lowestSlot - 1
+
+    def rm(self, id: str) -> bool:
+        """Removes the task with id `id`, if not possible, return false"""
+        try:
+            del self.tasks[id]
+            return True
+        except KeyError:
+            return False
+
+    def check(self, id: str) -> bool:
+        """Checks the task with id `id`, if not possible, return false"""
+        try:
+            self.tasks[id].complete()
+            return True
+        except KeyError:
+            return False
+
+    def is_empty(self) -> bool:
+        """Checks if the TaskList has any tasks, completed or not"""
+        return not bool(self.tasks)
 
 
 def main():
@@ -28,20 +94,20 @@ def main():
     flags = ["add", "rm", "ls", "check", "--help", "--version", "-v"]
     current_dir = os.getcwd()
     todo_file = os.path.join(current_dir, ".todo.json")
-    tasks = load_tasks(todo_file)
+    tasks = TaskList(todo_file)
 
     if len(argv) <= 1:
-        colorPrinter(
+        coloredText(
             "Please enter a flag or enter todo --help to find a list of all options.",
-            colors.WARNING,
+            COLORS["WARNING"]
         )
         return
 
     flag = argv[1]
 
     if flag not in flags:
-        colorPrinter(f"{flag} is not a valid flag.", colors.WARNING)
-        return
+        coloredText(f"{flag} is not a valid flag.", COLORS["WARNING"])
+        exit(1)
 
     if flag == "--help":
         print()
@@ -52,94 +118,43 @@ def main():
         print("  todo check <id>      Mark a task as completed")
         print("  todo --version, -v    Show version")
         print("  todo --help           Show this help message")
-        return
-
+    elif flag == "ls":
+        print()
+        if tasks.is_empty():
+            coloredText("No tasks created yet!", COLORS["ERROR"])
+            exit(1)
+        for id, task in tasks:
+            if task.completed:
+                coloredText(f"- [X] {task.name} id: {id}", COLORS["SUCCESS"])
+            else:
+                print(f"- [ ] {task.name} id: {id}")
     if flag in ["--version", "-v"]:
         print(f"todo {VERSION}")
-
-    if flag == "ls":
-        print()
-        if len(tasks) == 0:
-            colorPrinter("No tasks created yet!", colors.ERROR)
-        for i, task in enumerate(tasks):
-            if task["completed"] is True:
-                marker = "- [X]"
-                color = colors.SUCCESS
-            else:
-                marker = "- [ ]"
-                color = ""
-            print(color + f'{marker} {task["name"]} id: {i}' + colors.END)
-        return
     if flag == "add":
         if len(argv) <= 2:
-            colorPrinter("Please specify a task to add.", colors.WARNING)
-            return
-        task = {}
-        task["name"] = argv[2]
-        task["completed"] = False
-        tasks.append(task)
-        save_tasks(todo_file, tasks)
-        colorPrinter(f'{task["name"]} was added to tasks successfully!', colors.SUCCESS)
-        return
+            coloredText("Please specify a task to add.", COLORS["WARNING"])
+            exit(1)
+        tasks.add(argv[2])
+        coloredText(f'"{argv[2]}" was added successfully!', COLORS["SUCCESS"])
+        exit(0)
     if flag == "check":
         if len(argv) <= 2:
-            colorPrinter(
-                "Please specify the id of the task to mark as checked.", colors.WARNING
-            )
-            return
-        check_task(argv[2], tasks, todo_file)
-        return
+            coloredText("Please specify the id of the task to mark as checked.", COLORS["WARNING"])
+            exit(1)
+        if tasks.check(argv[2]):
+            coloredText("Checked task successfully.", COLORS["SUCCESS"])
+            exit(0)
+        else:
+            exit(1)
     if flag == "rm":
         if len(argv) <= 2:
-            colorPrinter("Please specify the id of the task to remove.", colors.WARNING)
-            return
-        remove_task(argv[2], tasks, todo_file)
-
-        return
-
-
-def load_tasks(filepath):
-    try:
-        with open(filepath, "r") as f:
-            tasks = json.load(f)
-    except FileNotFoundError:
-        tasks = []
-    return tasks
-
-
-def save_tasks(filepath, tasks):
-    with open(filepath, "w") as f:
-        json.dump(tasks, f, indent=4)
-
-
-def check_task(id, tasks, filepath):
-    try:
-        id = int(id)
-    except ValueError:
-        colorPrinter("Please enter a valid nummeric id!", colors.WARNING)
-        return
-    if id < 0 or id >= len(tasks):
-        colorPrinter("No task with that id found!", colors.ERROR)
-        return
-    task = tasks[id]
-    task["completed"] = True
-    save_tasks(filepath, tasks)
-    print(colors.SUCCESS + f'Task "{task["name"]}" was marked as checked!' + colors.END)
-
-
-def remove_task(id, tasks, filepath):
-    try:
-        id = int(id)
-    except ValueError:
-        colorPrinter("Please enter a valid nummeric id!", colors.WARNING)
-        return
-    if id < 0 or id >= len(tasks):
-        colorPrinter("No task with that id found!", colors.ERROR)
-        return
-    name = tasks[id]["name"]
-    tasks.pop(id)
-    save_tasks(filepath, tasks)
-    colorPrinter(f'Task "{name}" was removed!', colors.SUCCESS)
+            coloredText("Please specify the id of the task to remove.", COLORS["WARNING"])
+            exit(1)
+        if tasks.rm(argv[2]):
+            coloredText("Remove was successfully.", COLORS["SUCCESS"])
+            exit(0)
+        else:
+            exit(1)
 
 
 if __name__ == "__main__":
