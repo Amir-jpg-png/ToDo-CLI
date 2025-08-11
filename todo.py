@@ -17,7 +17,7 @@ def coloredText(text: str, color: str) -> None:
     print(colored(text, color))
 
 
-def load_tasks(filepath: str) -> dict[int, "Task"]:
+def load_tasks(filepath: str) -> dict[str, "Task"]:
     with open(filepath, "r") as f:
         return decode(json.load(f))
 
@@ -27,6 +27,9 @@ class Task:
         self.name = name
         self.completed = completed
 
+    def __repr__(self):
+        return f"Task(name={self.name}, completed={self.completed})"
+
     def complete(self):
         self.completed = True
 
@@ -34,8 +37,8 @@ class Task:
 class TaskList:
     def __init__(self, todo_file: str):
         self.file = todo_file
-        self.tasks: dict[int, Task] = load_tasks(self.file)
-        self.lowestSlot = 0
+        self.tasks: dict[str, Task] = load_tasks(self.file)
+        self.lowestSlot = int(max(self.tasks.keys())) + 1
         """holds the lowest possible id value"""
 
     def __iter__(self):
@@ -43,14 +46,15 @@ class TaskList:
 
     def __del__(self):
         with open(self.file, "w") as f:
-            json.dump(encode(self.tasks.copy()), f, indent=4)
+            json.dump(encode(self.tasks), f, indent=4)
 
     def add(self, taskname: str) -> int:
         """Adds a new task to the list and returns the id"""
-        self.tasks[self.lowestSlot] = Task(taskname)
-        return self.lowestSlot
+        self.tasks[str(self.lowestSlot)] = Task(taskname)
+        self.lowestSlot += 1
+        return self.lowestSlot - 1
 
-    def rm(self, id: int) -> bool:
+    def rm(self, id: str) -> bool:
         """Removes the task with id `id`, if not possible, return false"""
         try:
             del self.tasks[id]
@@ -58,7 +62,7 @@ class TaskList:
         except KeyError:
             return False
 
-    def check(self, id: int) -> bool:
+    def check(self, id: str) -> bool:
         """Checks the task with id `id`, if not possible, return false"""
         try:
             self.tasks[id].complete()
@@ -120,7 +124,7 @@ def main():
         if len(argv) <= 2:
             coloredText("Please specify the id of the task to mark as checked.", COLORS["WARNING"])
             exit(1)
-        if tasks.check(int(argv[2])):
+        if tasks.check(argv[2]):
             coloredText("Checked task successfully.", COLORS["SUCCESS"])
             exit(0)
         else:
@@ -129,11 +133,11 @@ def main():
         if len(argv) <= 2:
             coloredText("Please specify the id of the task to remove.", COLORS["WARNING"])
             exit(1)
-            if tasks.rm(argv[2]):
-                coloredText("Remove was successfully.", COLORS["SUCCESS"])
-                exit(0)
-            else:
-                exit(1)
+        if tasks.rm(argv[2]):
+            coloredText("Remove was successfully.", COLORS["SUCCESS"])
+            exit(0)
+        else:
+            exit(1)
 
 
 # def check_task(id, tasks, filepath):
