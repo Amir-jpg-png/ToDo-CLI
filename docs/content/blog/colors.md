@@ -1,7 +1,7 @@
 ---
 title: "Colors"
 description: "Adding colored output to our CLI using ANSI escape codes."
-summary: "We added colored terminal output to make our CLI more user-friendly."
+summary: "Ad prommissed we added colored terminal output to make our CLI more user-friendly. A versioning system wasn't introduced yet but this can count as version 1.1"
 date: 2025-08-11T00:30:35+02:00
 lastmod: 2025-08-11T00:30:35+02:00
 draft: false
@@ -18,32 +18,17 @@ seo:
   noindex: false
 ---
 
-## Colors in Our CLI
-
-As mentioned in our earlier roadmap post, we’ve now added **colored terminal output** to the CLI tool.  
-The main reason is to make important messages easier to see at a glance — errors in red, successes in green, warnings in yellow.
-
 ---
 
 ### ANSI Escape Codes
 
 Our CLI uses [ANSI escape codes](https://en.wikipedia.org/wiki/ANSI_escape_code) to change text color in the terminal.  
-Here are some examples, but rendered in HTML so you can see the effect right here in the browser:
+Here are some examples.
 
 <pre style="background:black;color:white;padding:0.75em;">
-<span style="color:red">This is red</span>
-<span style="color:green">This is green</span>
-<span style="color:orange">This is yellow</span>
+<span style="color:red">No tasks found yet!</span>
+<span style="color:green">Task create api_controller was added!</span>
+<span style="color:orange">Please enter a valid id!</span>
 </pre>
 
 ---
-
-### What’s Happening Under the Hood
-
-In the CLI, we output these colors using sequences like:
-
-```text
-\033[31mThis is red\033[0m
-\033[32mThis is green\033[0m
-\033[33mThis is yellow\033[0m
-```

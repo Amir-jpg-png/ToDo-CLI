@@ -3,6 +3,14 @@ import json
 import os
 from sys import argv
 
+VERSION = 1.2
+
+"""
+Version: 1.2 
+- added --version and -v flag 
+- improved --help flag
+"""
+
 
 class colors:
     ERROR = "\033[0;31m"
@@ -16,7 +24,8 @@ def colorPrinter(message, color):
 
 
 def main():
-    flags = ["add", "rm", "ls", "check", "--help"]
+    """Entry point of programm"""
+    flags = ["add", "rm", "ls", "check", "--help", "--version", "-v"]
     current_dir = os.getcwd()
     todo_file = os.path.join(current_dir, ".todo.json")
     tasks = load_tasks(todo_file)
@@ -36,22 +45,23 @@ def main():
 
     if flag == "--help":
         print()
-        for i in flags:
-            if i == "--help":
-                continue
-            if i == "ls":
-                print(f"todo {i}")
-                continue
-            if i in ["rm", "check"]:
-                print(f'todo {i} "id"')
-                continue
-            print(f'todo {i} "task"')
+        print("Usage:")
+        print('  todo add "task"      Add a new task')
+        print("  todo rm <id>         Remove a task by ID")
+        print("  todo ls               List all tasks")
+        print("  todo check <id>      Mark a task as completed")
+        print("  todo --version, -v    Show version")
+        print("  todo --help           Show this help message")
+        return
+
+    if flag in ["--version", "-v"]:
+        print(f"todo {VERSION}")
+
     if flag == "ls":
         print()
         if len(tasks) == 0:
             colorPrinter("No tasks created yet!", colors.ERROR)
-        for i in range(len(tasks)):
-            task = tasks[i]
+        for i, task in enumerate(tasks):
             if task["completed"] is True:
                 marker = "- [X]"
                 color = colors.SUCCESS
