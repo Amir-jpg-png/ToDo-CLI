@@ -80,7 +80,7 @@ def version():
     click.echo(f"todo {VERSION}")
 
 
-@cli.command()
+@cli.command(deprecated=True)
 def help():
     """Show this help message"""
     click.echo("Usage:")
