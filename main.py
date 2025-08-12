@@ -1,14 +1,9 @@
 #!/usr/bin/env python3
 import os
 import click
-from utils import coloredText, TaskList
+from utils import TaskList, error, success
 
-VERSION = "1.3"
-COLORS = {
-    "ERROR": "red",
-    "WARNING": "yellow",
-    "SUCCESS": "green",
-}
+VERSION = "1.4"
 
 
 def get_task_list():
@@ -28,7 +23,7 @@ def add(task):
     """Add a new task"""
     tasks = get_task_list()
     tasks.add(task)
-    coloredText(f'"{task}" was added successfully!', COLORS["SUCCESS"])
+    success(f'"{task}" was added successfully!')
 
 
 @cli.command()
@@ -37,7 +32,7 @@ def rm(task_id):
     """Remove a task by ID"""
     tasks = get_task_list()
     if tasks.rm(task_id):
-        coloredText("Remove was successful.", COLORS["SUCCESS"])
+        success("Remove was successful.")
     else:
         raise SystemExit(1)
 
@@ -47,11 +42,11 @@ def ls():
     """List all tasks"""
     tasks = get_task_list()
     if tasks.is_empty():
-        coloredText("No tasks created yet!", COLORS["ERROR"])
+        error("No tasks created yet!")
         raise SystemExit(1)
     for id, task in tasks:
         if task.checked():
-            coloredText(f"- [X] {task.name} id: {id}", COLORS["SUCCESS"])
+            success(f"- [X] {task.name} id: {id}")
         else:
             click.echo(f"- [ ] {task.name} id: {id}")
 
@@ -62,7 +57,7 @@ def check(task_id):
     """Mark a task as completed"""
     tasks = get_task_list()
     if tasks.check(task_id):
-        coloredText("Checked task successfully.", COLORS["SUCCESS"])
+        success("Checked task successfully.")
     else:
         raise SystemExit(1)
 
@@ -72,10 +67,11 @@ def check(task_id):
 def uncheck(task_id):
     """Mark a task as open"""
     tasks = get_task_list()
-    if tasks.uncheck(task_id):
-        coloredText("Unchecked task successfully.", COLORS["SUCCESS"])
-    else:
-        raise SystemExit(1)
+    match tasks.uncheck(task_id):
+        case 0:
+            success("Unchecked task successfully.")
+        case 1:
+            raise SystemExit(1)
 
 
 @cli.command()
