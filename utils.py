@@ -3,7 +3,7 @@ import json
 from jsonpickle import encode, decode
 from termcolor import colored
 
-VERSION = 1.3
+VERSION = "1.3"
 
 
 def coloredText(text: str, color: str) -> None:
