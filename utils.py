@@ -104,10 +104,14 @@ class TaskList:
         """Checks if the TaskList has any tasks, completed or not"""
         return not bool(self._tasks)
 
-    def purge(self):
+    def purge(self) -> tuple[int, dict[str, Task]]:
         """Deletes all checked tasks"""
         unchecked = dict()
-        for id, task in self:
+        purged = dict()
+        for id, task in self._tasks.items():
             if not task.checked():
                 unchecked[id] = task
+            else:
+                purged[id] = task
         self._tasks = unchecked
+        return (0 if purged else 1, purged)

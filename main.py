@@ -80,11 +80,24 @@ def uncheck(task_id):
 
 
 @cli.command()
-@click.option("--verbose", "-v", help="display all removed tasks", default=False)
+@click.option("--verbose", "-v", help="display all removed tasks", default=False, is_flag=True)
 def purge(verbose: bool):
     """Removes all checked tasks"""
     tasks = get_task_list()
-    tasks.purge()
+    return_code, purged = tasks.purge()
+    if verbose:
+        for id, task in purged.items():
+            print(f"{id}: {task.name}")
+
+    match return_code:
+        case 0:
+            return
+        case 1:
+            warning("Nothing to purge.")
+        case code:
+            error(f"Programm exited with error code {code}!")
+            raise SystemExit(code)
+
 
 
 @cli.command()
