@@ -76,13 +76,13 @@ class TaskList:
         self._tasks[str(self.lowestSlot)] = Task(taskname)
         return self.lowestSlot
 
-    def rm(self, id: str) -> bool:
-        """Removes the task with id `id`, if not possible, return false"""
+    def rm(self, id: str) -> int:
+        """Removes the task with id `id`, if not possible, return the error code"""
         try:
             del self._tasks[id]
-            return True
+            return 0
         except KeyError:
-            return False
+            return 1
 
     def check(self, id: str) -> int:
         """Checks the task with id `id`, if not possible, return and error code"""

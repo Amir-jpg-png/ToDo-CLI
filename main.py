@@ -31,10 +31,12 @@ def add(task):
 def rm(task_id):
     """Remove a task by ID"""
     tasks = get_task_list()
-    if tasks.rm(task_id):
-        success("Remove was successful.")
-    else:
-        raise SystemExit(1)
+    match tasks.rm(task_id):
+        case 0:
+            success("Remove was successful.")
+        case code:
+            error(f"Programm exited with error code {code}!")
+            raise SystemExit(code)
 
 
 @cli.command()
@@ -56,10 +58,12 @@ def ls():
 def check(task_id):
     """Mark a task as completed"""
     tasks = get_task_list()
-    if tasks.check(task_id):
-        success("Checked task successfully.")
-    else:
-        raise SystemExit(1)
+    match tasks.check(task_id):
+        case 0:
+            success("Checked task successfully.")
+        case code:
+            error(f"Programm exited with error code {code}!")
+            raise SystemExit(code)
 
 
 @cli.command()
@@ -70,8 +74,9 @@ def uncheck(task_id):
     match tasks.uncheck(task_id):
         case 0:
             success("Unchecked task successfully.")
-        case 1:
-            raise SystemExit(1)
+        case code:
+            error(f"Programm exited with error code {code}!")
+            raise SystemExit(code)
 
 
 @cli.command()
