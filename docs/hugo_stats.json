@@ -293,6 +293,8 @@
       "todo-check-id",
       "todo-ls",
       "todo-rm-id",
+      "typer",
+      "uncheck-option",
       "verify-installation",
       "version-10",
       "version-11",

@@ -14,13 +14,14 @@ seo:
   noindex: false # false (default) or true
 ---
 
-| Command / Option  | Description                                               |
-| ----------------- | --------------------------------------------------------- |
-| `todo --help`     | Show all available commands and their expected arguments  |
-| `todo add "task"` | Add a new task to the current project's `.todo.json` file |
-| `todo ls`         | List all completed and uncompleted tasks                  |
-| `todo check [id]` | Mark a task as completed                                  |
-| `todo rm [id]`    | Remove a task permanently                                 |
+| Command / Option    | Description                                               |
+| ------------------- | --------------------------------------------------------- |
+| `todo --help`       | Show all available commands and their expected arguments  |
+| `todo add "task"`   | Add a new task to the current project's `.todo.json` file |
+| `todo ls`           | List all completed and uncompleted tasks                  |
+| `todo check [id]`   | Mark a task as completed                                  |
+| `todo uncheck [id]` | Uncheck a task that was marked as complete                |
+| `todo rm [id]`      | Remove a task permanently                                 |
 
 There are five commands and one flag to the todo command.
 
@@ -62,6 +63,12 @@ todo check [id]
 ```
 
 This command marks the task with the corresponding id as completed.
+
+```bash
+todo uncheck [id]
+```
+
+This command marks the task with the corresponding id as open.
 
 Lastly the rm command
 
