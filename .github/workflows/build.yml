@@ -1,5 +1,8 @@
 name: Build and Release on Version Change
 
+permissions:
+  contents: write # This allows the workflow to create releases and upload assets
+
 on:
   push:
     branches:
@@ -21,7 +24,6 @@ jobs:
       - name: Get VERSION from main.py
         id: get_version
         run: |
-          # Extract VERSION from main.py (assumes a line like: VERSION = "1.2.3")
           VERSION_LINE=$(grep '^VERSION =' main.py)
           VERSION=$(echo $VERSION_LINE | cut -d '"' -f 2)
           echo "version=$VERSION" >> $GITHUB_OUTPUT
@@ -49,9 +51,18 @@ jobs:
           pyinstaller --onefile main.py
 
       - name: Create GitHub Release
+        id: create_release
         if: steps.compare_version.outputs.version_changed == 'true'
         uses: ncipollo/release-action@v1
         with:
           tag: ${{ steps.get_version.outputs.version }}
           name: Release ${{ steps.get_version.outputs.version }}
-          files: dist/main
+
+      - name: Upload release asset
+        if: steps.compare_version.outputs.version_changed == 'true'
+        uses: actions/upload-release-asset@v1
+        with:
+          upload_url: ${{ steps.create_release.outputs.upload_url }}
+          asset_path: ./dist/main
+          asset_name: main
+          asset_content_type: application/octet-stream
