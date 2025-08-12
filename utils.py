@@ -3,11 +3,20 @@ import json
 from jsonpickle import encode, decode
 from termcolor import colored
 
-VERSION = 1.3
+VERSION = "1.3.1"
+COLORS = {
+    "ERROR": "red",
+    "WARNING": "yellow",
+    "SUCCESS": "green",
+}
 
+def error(msg: str):
+    """Prints a styled error message to stdout"""
+    print(colored(msg, COLORS["ERROR"]))
 
-def coloredText(text: str, color: str) -> None:
-    print(colored(text, color))
+def success(msg: str):
+    """Prints a styled success message to stdout"""
+    print(colored(msg, COLORS["SUCCESS"]))
 
 
 def load_tasks(filepath: str) -> tuple[int, dict[str, "Task"]]:
@@ -46,6 +55,7 @@ class Task:
 
 
 class TaskList:
+    """Holds multiple tasks"""
     def __init__(self, todo_file: str):
         self.file = todo_file
         self.lowestSlot, self._tasks = load_tasks(self.file)
@@ -70,21 +80,21 @@ class TaskList:
         except KeyError:
             return False
 
-    def check(self, id: str) -> bool:
-        """Checks the task with id `id`, if not possible, return false"""
+    def check(self, id: str) -> int:
+        """Checks the task with id `id`, if not possible, return and error code"""
         try:
             self._tasks[id].check()
-            return True
+            return 0
         except KeyError:
-            return False
+            return 1
 
-    def uncheck(self, id: str) -> bool:
-        """Unchecks the task with id `id`, if not possible, return false"""
+    def uncheck(self, id: str) -> int:
+        """Unchecks the task with id `id`, if not possible, return the corresponding error code"""
         try:
             self._tasks[id].uncheck()
-            return True
+            return 0
         except KeyError:
-            return False
+            return 1
 
     def is_empty(self) -> bool:
         """Checks if the TaskList has any tasks, completed or not"""

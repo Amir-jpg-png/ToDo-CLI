@@ -1,18 +1,9 @@
 #!/usr/bin/env python3
 import os
+import click
+from utils import TaskList, error, success
 
-import typer
-
-from utils import TaskList, coloredText
-
-app = typer.Typer()
-
-VERSION = "1.3"
-COLORS = {
-    "ERROR": "red",
-    "WARNING": "yellow",
-    "SUCCESS": "green",
-}
+VERSION = "1.4"
 
 
 def get_task_list():
@@ -21,77 +12,86 @@ def get_task_list():
     return TaskList(todo_file)
 
 
-@app.command()
-def add(task: str):
+@click.group()
+def cli():
+    pass
+
+
+@cli.command()
+@click.argument('task')
+def add(task):
     """Add a new task"""
     tasks = get_task_list()
     tasks.add(task)
-    coloredText(f'"{task}" was added successfully!', COLORS["SUCCESS"])
+    success(f'"{task}" was added successfully!')
 
 
-@app.command()
-def rm(task_id: str):
+@cli.command()
+@click.argument('task_id')
+def rm(task_id):
     """Remove a task by ID"""
     tasks = get_task_list()
     if tasks.rm(task_id):
-        coloredText("Remove was successful.", COLORS["SUCCESS"])
+        success("Remove was successful.")
     else:
-        raise typer.Exit(code=1)
+        raise SystemExit(1)
 
 
-@app.command()
+@cli.command()
 def ls():
     """List all tasks"""
     tasks = get_task_list()
     if tasks.is_empty():
-        coloredText("No tasks created yet!", COLORS["ERROR"])
-        raise typer.Exit(code=1)
-
+        error("No tasks created yet!")
+        raise SystemExit(1)
     for id, task in tasks:
         if task.checked():
-            coloredText(f"- [X] {task.name} id: {id}", COLORS["SUCCESS"])
+            success(f"- [X] {task.name} id: {id}")
         else:
-            typer.echo(f"- [ ] {task.name} id: {id}")
+            click.echo(f"- [ ] {task.name} id: {id}")
 
 
-@app.command()
-def check(task_id: str):
+@cli.command()
+@click.argument('task_id')
+def check(task_id):
     """Mark a task as completed"""
     tasks = get_task_list()
     if tasks.check(task_id):
-        coloredText("Checked task successfully.", COLORS["SUCCESS"])
+        success("Checked task successfully.")
     else:
-        raise typer.Exit(code=1)
+        raise SystemExit(1)
 
 
-@app.command()
-def uncheck(task_id: str):
+@cli.command()
+@click.argument('task_id')
+def uncheck(task_id):
     """Mark a task as open"""
     tasks = get_task_list()
-    if tasks.uncheck(task_id):
-        coloredText("Unchecked task successfully.", COLORS["SUCCESS"])
-    else:
-        raise typer.Exit(code=1)
+    match tasks.uncheck(task_id):
+        case 0:
+            success("Unchecked task successfully.")
+        case 1:
+            raise SystemExit(1)
 
 
-@app.command()
+@cli.command()
 def version():
     """Show version"""
-    typer.echo(f"todo {VERSION}")
+    click.echo(f"todo {VERSION}")
 
 
-@app.command()
+@cli.command()
 def help():
     """Show this help message"""
-    typer.echo("Usage:")
-    typer.echo('  todo add "task"      Add a new task')
-    typer.echo("  todo rm <id>         Remove a task by ID")
-    typer.echo("  todo ls              List all tasks")
-    typer.echo("  todo check <id>      Mark a task as completed")
-    typer.echo("  todo uncheck <id>    Mark a task as open")
-    typer.echo("  todo --version, -v   Show version")
-    typer.echo("  todo --help          Show this help message")
+    click.echo("Usage:")
+    click.echo('  todo add "task"      Add a new task')
+    click.echo("  todo rm <id>         Remove a task by ID")
+    click.echo("  todo ls              List all tasks")
+    click.echo("  todo check <id>      Mark a task as completed")
+    click.echo("  todo uncheck <id>    Mark a task as open")
+    click.echo("  todo --version, -v   Show version")
+    click.echo("  todo --help          Show this help message")
 
 
 if __name__ == "__main__":
-    app()
+    cli()
