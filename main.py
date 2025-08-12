@@ -1,9 +1,11 @@
 #!/usr/bin/env python3
 import os
-import click
-from utils import TaskList, error, warning, success
 
-VERSION = "1.4.1"
+import click
+
+from utils import TaskList, error, success, warning
+
+VERSION = "1.4.2"
 
 
 def get_task_list():
@@ -18,7 +20,7 @@ def cli():
 
 
 @cli.command()
-@click.argument('task')
+@click.argument("task")
 def add(task):
     """Add a new task"""
     tasks = get_task_list()
@@ -27,7 +29,7 @@ def add(task):
 
 
 @cli.command()
-@click.argument('task_id')
+@click.argument("task_id")
 def rm(task_id):
     """Remove a task by ID"""
     tasks = get_task_list()
@@ -54,7 +56,7 @@ def ls():
 
 
 @cli.command()
-@click.argument('task_id')
+@click.argument("task_id")
 def check(task_id):
     """Mark a task as completed"""
     tasks = get_task_list()
@@ -67,7 +69,7 @@ def check(task_id):
 
 
 @cli.command()
-@click.argument('task_id')
+@click.argument("task_id")
 def uncheck(task_id):
     """Mark a task as open"""
     tasks = get_task_list()
@@ -80,7 +82,9 @@ def uncheck(task_id):
 
 
 @cli.command()
-@click.option("--verbose", "-v", help="display all removed tasks", default=False, is_flag=True)
+@click.option(
+    "--verbose", "-v", help="display all removed tasks", default=False, is_flag=True
+)
 def purge(verbose: bool):
     """Removes all checked tasks"""
     tasks = get_task_list()
@@ -97,7 +101,6 @@ def purge(verbose: bool):
         case code:
             error(f"Programm exited with error code {code}!")
             raise SystemExit(code)
-
 
 
 @cli.command()
