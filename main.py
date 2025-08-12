@@ -1,21 +1,25 @@
 #!/usr/bin/env python3
 import os
+
 import typer
-from utils import coloredText, TaskList
+
+from utils import TaskList, coloredText
 
 app = typer.Typer()
 
-VERSION = 1.3
+VERSION = "1.3"
 COLORS = {
     "ERROR": "red",
     "WARNING": "yellow",
     "SUCCESS": "green",
 }
 
+
 def get_task_list():
     current_dir = os.getcwd()
     todo_file = os.path.join(current_dir, ".todo.json")
     return TaskList(todo_file)
+
 
 @app.command()
 def add(task: str):
@@ -23,6 +27,7 @@ def add(task: str):
     tasks = get_task_list()
     tasks.add(task)
     coloredText(f'"{task}" was added successfully!', COLORS["SUCCESS"])
+
 
 @app.command()
 def rm(task_id: str):
@@ -32,6 +37,7 @@ def rm(task_id: str):
         coloredText("Remove was successful.", COLORS["SUCCESS"])
     else:
         raise typer.Exit(code=1)
+
 
 @app.command()
 def ls():
@@ -47,6 +53,7 @@ def ls():
         else:
             typer.echo(f"- [ ] {task.name} id: {id}")
 
+
 @app.command()
 def check(task_id: str):
     """Mark a task as completed"""
@@ -55,6 +62,7 @@ def check(task_id: str):
         coloredText("Checked task successfully.", COLORS["SUCCESS"])
     else:
         raise typer.Exit(code=1)
+
 
 @app.command()
 def uncheck(task_id: str):
@@ -65,10 +73,12 @@ def uncheck(task_id: str):
     else:
         raise typer.Exit(code=1)
 
+
 @app.command()
 def version():
     """Show version"""
     typer.echo(f"todo {VERSION}")
+
 
 @app.command()
 def help():
@@ -81,6 +91,7 @@ def help():
     typer.echo("  todo uncheck <id>    Mark a task as open")
     typer.echo("  todo --version, -v   Show version")
     typer.echo("  todo --help          Show this help message")
+
 
 if __name__ == "__main__":
     app()
