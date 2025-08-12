@@ -14,6 +14,10 @@ def error(msg: str):
     """Prints a styled error message to stdout"""
     print(colored(msg, COLORS["ERROR"]))
 
+def warning(msg: str):
+    """Prints a styled warning message to stdout"""
+    print(colored(msg, COLORS["WARNING"]))
+
 def success(msg: str):
     """Prints a styled success message to stdout"""
     print(colored(msg, COLORS["SUCCESS"]))

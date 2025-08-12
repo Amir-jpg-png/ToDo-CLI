@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 import os
 import click
-from utils import TaskList, error, success
+from utils import TaskList, error, warning, success
 
 VERSION = "1.4.1"
 
@@ -42,13 +42,13 @@ def ls():
     """List all tasks"""
     tasks = get_task_list()
     if tasks.is_empty():
-        error("No tasks created yet!")
+        warning("No tasks created yet!")
         raise SystemExit(1)
     for id, task in tasks:
         if task.checked():
-            success(f"- [X] {task.name} id: {id}")
+            success(f"- [X] {id}: {task.name}")
         else:
-            click.echo(f"- [ ] {task.name} id: {id}")
+            click.echo(f"- [ ] {id}: {task.name}")
 
 
 @cli.command()
