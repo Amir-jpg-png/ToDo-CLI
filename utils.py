@@ -3,7 +3,7 @@ import json
 from jsonpickle import encode, decode
 from termcolor import colored
 
-VERSION = "1.3.1"
+VERSION = "1.3.2"
 COLORS = {
     "ERROR": "red",
     "WARNING": "yellow",
@@ -99,3 +99,11 @@ class TaskList:
     def is_empty(self) -> bool:
         """Checks if the TaskList has any tasks, completed or not"""
         return not bool(self._tasks)
+
+    def purge(self):
+        """Deletes all checked tasks"""
+        unchecked = dict()
+        for id, task in self:
+            if not task.checked():
+                unchecked[id] = task
+        self._tasks = unchecked

@@ -3,7 +3,7 @@ import os
 import click
 from utils import TaskList, error, success
 
-VERSION = "1.4"
+VERSION = "1.4.1"
 
 
 def get_task_list():
@@ -72,6 +72,14 @@ def uncheck(task_id):
             success("Unchecked task successfully.")
         case 1:
             raise SystemExit(1)
+
+
+@cli.command()
+@click.option("--verbose", "-v", help="display all removed tasks", default=False)
+def purge(verbose: bool):
+    """Removes all checked tasks"""
+    tasks = get_task_list()
+    tasks.purge()
 
 
 @cli.command()
