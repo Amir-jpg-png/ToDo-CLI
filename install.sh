@@ -1,18 +1,30 @@
-#/bin/bash
+#!/bin/bash
+set -e
 
-set -e 
-REPO_URL="http://localhost:3002/Amir/ToDo-CLI.git"
-CLONE_DIR="/tmp/todo-install"
+BINARY_NAME="main"
+INSTALL_PATH="/usr/local/bin/todo"  # change if needed
 
-if [ -d "$CLONE_DIR/.git" ]; then
-  echo "Updating existing repository"
-  git -C "$CLONE_DIR" pull
-else
-  echo "Cloning repository..."
-  git clone "$REPO_URL" "$CLONE_DIR"
+echo "Fetching latest release download URL..."
+
+# Get JSON from GitHub API and extract URL for the asset named "main"
+DOWNLOAD_URL=$(curl -s "https://api.github.com/repos/Amir-jpg-png/ToDo-CLI/releases/latest" \
+  | grep "browser_download_url" \
+  | grep "$BINARY_NAME" \
+  | head -n 1 \
+  | sed -E 's/.*"([^"]+)".*/\1/')
+
+if [[ -z "$DOWNLOAD_URL" ]]; then
+  echo "Error: Could not find download URL for $BINARY_NAME"
+  exit 1
 fi
 
-chmod +x "$CLONE_DIR/todo.py"
-sudo cp "$CLONE_DIR/todo.py" "/usr/local/bin/todo"
+echo "Downloading $BINARY_NAME from $DOWNLOAD_URL ..."
+curl -L -o "$BINARY_NAME" "$DOWNLOAD_URL"
 
-echo "Installed todo script! You can now run 'todo' from Anywhere!"
+echo "Making binary executable..."
+chmod +x "$BINARY_NAME"
+
+echo "Moving binary to $INSTALL_PATH (requires sudo)..."
+sudo mv "$BINARY_NAME" "$INSTALL_PATH"
+
+echo "Done! You can now run 'todo' from the command line."
